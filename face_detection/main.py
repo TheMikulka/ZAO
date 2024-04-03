@@ -1,4 +1,6 @@
 import cv2 as cv
+import numpy as np
+import time
 
 def draw_rect_by_cascade(face_cascade, frame, scaleFactor, minNeighbors, minSize):
     faces = face_cascade.detectMultiScale(frame, scaleFactor=scaleFactor, minNeighbors=minNeighbors, minSize=minSize, maxSize=(500, 500))
@@ -26,8 +28,8 @@ def draw_rectangle (paint_frame, locations, color1, color2):
 
 def eye_open(image):
     gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
-    blurred = cv.GaussianBlur(gray, (5, 5), 2)
-    #cv.imshow("Preprocessed Image", blurred)
+    blurred = cv.GaussianBlur(gray, (7, 5), 2)
+    cv.imshow("Preprocessed Image", blurred)
     circles = cv.HoughCircles(gray, cv.HOUGH_GRADIENT, 1, 1, param1=50, param2=20, minRadius=10, maxRadius=40)
     if circles is not None:
         return True
@@ -45,6 +47,7 @@ def face_detect():
 
     threshold_distance = 100.0   
     while True:
+        start_time = time.time()
         ret, frame = video_cap.read()
         if frame is None:
             break
@@ -74,15 +77,20 @@ def face_detect():
                     
                     #cv.imshow(f"Eye", face_roi[eye_y:eye_y+eye_h, eye_x:eye_x+eye_w])
                     if eye_open(face_roi[eye_y:eye_y+eye_h, eye_x:eye_x+eye_w]):
-                        print(f"Eye {eye_index} is open")
+                        #print(f"Eye {eye_index} is open")
                         draw_rectangle(paint_frame[y:y+h, x:x+w], [eye], (0,255,0), (203, 192, 255))
                     else:
-                        print(f"Eye {eye_index} is closed")
+                        #print(f"Eye {eye_index} is closed")
                         draw_rectangle(paint_frame[y:y+h, x:x+w], [eye], (0,0,255), (203, 192, 255))
             
                 mouth = draw_rect_by_cascade(mouth_cascade, face_roi, 1.2, 50, (40,40))
                 for m in mouth:
                     draw_rectangle(paint_frame[y:y+h, x:x+w], [m], (255,0,0), (203, 192, 255))
+            end_time = time.time()
+
+            final_time = end_time - start_time
+            cv.putText(paint_frame, f"FPS: {1/final_time:.2f}", (10, 30), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv.LINE_AA)
+            cv.putText(paint_frame, f"DELTA: {final_time:.2f}", (10, 60), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv.LINE_AA)
             
             
 
