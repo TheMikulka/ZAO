@@ -140,15 +140,16 @@ for img_name in test_images:
         cv.line(image, (int(coord[2]), int(coord[3])), (int(coord[4]), int(coord[5])), color, 4)
         cv.line(image, (int(coord[4]), int(coord[5])), (int(coord[6]), int(coord[7])), color, 4)
 
-        cv.imshow("image", image)
+        # cv.imshow("image", image)
 
-        if cv.waitKey(1) == ord('q'):
-            break
+        # if cv.waitKey(1) == ord('q'):
+        #     break
+        # cv.waitKey(1)
     f1_score = calculate_f1_score(result[position_result], my_result)
     print("\033[1;34mF1 score:\033[0m", f1_score)
     final_f1.append(f1_score)
     position_result += 1
 
-    if cv.waitKey(0) == ord('w'):
-            break
+    # if cv.waitKey(0) == ord('w'):
+    #         break
 print("FINAL F1 SCORE:", sum(final_f1) / len(final_f1))
