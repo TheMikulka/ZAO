@@ -1,4 +1,4 @@
 out_video.avi
 template
 venv
-\blink_detection\landmark_models
+/blink_detection/landmark_models
