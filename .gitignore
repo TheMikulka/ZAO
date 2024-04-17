@@ -5,3 +5,4 @@ blink_detection/landmark_models
 blink_detection/anomal_hd_30fps_02
 blink_detection/anomal_hd_30fps_01
 anomal_hd_30fps_02_anot.txt
+face_swapping_v3/landmark_models
